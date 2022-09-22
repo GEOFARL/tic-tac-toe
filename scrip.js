@@ -7,7 +7,7 @@ startGamePlVsPlBtn.addEventListener('click', () => {
     const pvspWindow = document.querySelector('.player-vs-player-window');
     pvspWindow.style.display = 'grid';
 })
-startGamePlVsPlBtn.addEventListener('touch', () => {
+startGamePlVsPlBtn.addEventListener('touchend', () => {
     const loadingWindow = document.querySelector('.loading-window');
     loadingWindow.style.display = 'none';
     const pvspWindow = document.querySelector('.player-vs-player-window');
@@ -120,7 +120,7 @@ let secureGame = (function() {
     const game = (() => {
         let players, moveCount;
         beginGameBtn.addEventListener('click', initializeGame);
-        beginGameBtn.addEventListener('touch', initializeGame);
+        beginGameBtn.addEventListener('touchend', initializeGame);
         function initializeGame() {
             const pattern = /^[A-Za-z_.\-0-9]{3,20}$/;
             if (pattern.test(document.querySelector('#player1').value) && pattern.test(document.querySelector('#player2').value)) {
@@ -141,7 +141,7 @@ let secureGame = (function() {
                 moveCount = 1;
                 [...document.querySelectorAll('.field-container div')].forEach((section) => {
                     section.addEventListener('click', addMark);
-                    section.addEventListener('touch', addMark);
+                    section.addEventListener('touchend', addMark);
                 })
                 document.querySelector('.turn').style.display = 'block';
                 document.querySelector('.player-name').innerText = '';
@@ -196,9 +196,9 @@ let secureGame = (function() {
                     document.querySelector('.turn').innerText = `${players.player1.getName().capitalize()}'s turn`;
                 }
                 newGameBtn.addEventListener('click', changeDisplay);
-                newGameBtn.addEventListener('touch', changeDisplay);
+                newGameBtn.addEventListener('touchend', changeDisplay);
                 swapPlacesBtn.addEventListener('click', swapPlaces);
-                swapPlacesBtn.addEventListener('touch', swapPlaces);
+                swapPlacesBtn.addEventListener('touchend', swapPlaces);
             }
         }
     })();
