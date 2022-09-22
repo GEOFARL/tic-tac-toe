@@ -13,6 +13,7 @@ body {
   min-height: 100vh;
   font-family: "Source Code Pro", monospace;
   display: none;
+  display: grid;
   place-content: center;
   justify-items: center;
   position: relative;
@@ -117,6 +118,7 @@ body {
 
 .player-vs-player-window {
   display: grid;
+  display: none;
   min-height: 100vh;
   min-width: 100vw;
   grid-template-rows: 1fr 1fr 3fr;
