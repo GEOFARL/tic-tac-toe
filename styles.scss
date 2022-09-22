@@ -1,5 +1,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;400;500;600;700;800;900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
+// $bg-color: #FCE4EC;
+// $btn-bg-color-load-page-hover: #E91E63;
+// $btn-bg-color-load-page: #F06292;
+$animation-time: 800ms;
+
+@mixin button {
+    button {
+            font-size: clamp(0.7rem, 0.7rem + 1vw, 1.5rem);
+            width: min(43vw, 250px);
+            padding: 0.6rem 0.4rem;
+            border: none;
+            border-radius: 10px;
+            background-color: #F06292;
+            font-family: 'Ubuntu', sans-serif;
+            color: white;
+    
+            &:hover {
+                z-index: 3;
+                background-color: #F06292;
+                cursor: pointer;
+                box-shadow: 0 0 0 black;
+                animation: btn-hover 400ms ease-in-out forwards;
+            }
+        }
+        @keyframes btn-hover {
+            to {
+                background-color: #E91E63;
+                box-shadow: 0 0 10px #E91E63, 0 0 20px #E91E63, 0 0 40px #E91E63;
+            }
+        }
+}
+
+@mixin background {
+    position: relative;
+    background-color: #FCE4EC;
+    z-index: 0;
+
+    &::before {
+        content: "";
+        z-index: -2;
+        position: absolute;
+        background-image: url("../images/bg-img.png");
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-size: 300%;
+        background-position: center;
+        opacity: 0.04;
+    }
+}
+
 *, *::after, *::before {
     margin: 0;
     padding: 0;
@@ -13,7 +65,8 @@ body {
 .loading-window {
     min-height: 100vh;
     font-family: 'Source Code Pro', monospace;
-    display: grid;
+    display: none;
+    // display: grid;
     place-content: center;
     justify-items: center;
     position: relative;
@@ -26,8 +79,8 @@ body {
         background-image: url("../images/bg-img.png");
         left: 0;
         top: 0;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         background-size: 300%;
         background-position: center;
         opacity: 0.04;
@@ -53,6 +106,7 @@ body {
                 animation: typing 5.5s steps(11) 1s forwards;
             }
             &::after {
+                z-index: 1;
                 width: 0.125em;
                 animation: typing 5.5s steps(11) 1s forwards, 
                 blinking 700ms steps(11) 0s 11 normal none;
@@ -79,23 +133,7 @@ body {
         opacity: 0;
         transform: translateY(-80px);
         animation: btns-appearance 500ms ease-in-out 8.3s 1 normal forwards;
-        button {
-            font-size: clamp(0.7rem, 0.7rem + 1vw, 1.5rem);
-            width: min(43vw, 250px);
-            padding: 0.6rem 0.4rem;
-            border: none;
-            border-radius: 10px;
-            background-color: #F06292;
-            font-family: 'Ubuntu', sans-serif;
-            color: white;
-            &:hover {
-                z-index: 3;
-                background-color: #F06292;
-                cursor: pointer;
-                box-shadow: 0 0 0 black;
-                animation: btn-hover 400ms ease-in-out forwards;
-            }
-        }
+        @include button();
     }
     @keyframes btns-appearance {
         100% {
@@ -108,10 +146,151 @@ body {
             transform: translateY(0);
         }
     }
-    @keyframes btn-hover {
-        to {
-            background-color: #E91E63;
-            box-shadow: 0 0 10px #E91E63, 0 0 20px #E91E63, 0 0 40px #E91E63;
+}
+
+.player-vs-player-window {
+    display: grid;
+    // display: none;
+    min-height: 100vh;
+    min-width: 100vw;
+    grid-template-rows: 1fr 1fr 3fr;
+    @include background();
+    .players-container {
+        div {
+            animation: appearance $animation-time ease-in-out forwards;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        font-size: clamp(0.8rem, 0.8rem + 1vw, 1.5rem);
+        padding: 40px 20px;
+        display: flex;
+        gap: 30vw;
+        justify-content: center;
+        font-family: 'Ubuntu', sans-serif;
+        input{
+            display: block;
+            width: min(30vw, 250px);
+            height: 40px;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 1rem;
+            border: none;
+            background-color: #FF8A80;
+            color: white;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.576);
+            &::placeholder {
+                color: rgb(224, 221, 221);
+            }
+            &:focus {
+                outline: 2px solid #050505;
+            }
+            &:hover {
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.643);
+            }
+        }
+    }
+    .new-game-container {
+        display: grid;
+        animation: appearance $animation-time ease-in-out forwards;
+        // display: none;
+        place-items: center;
+        @include button()
+    }
+    .field-container {
+        padding: 2vh 4vw 0 4vw;
+        animation: appearance $animation-time ease-in-out forwards;
+        display: grid;
+        display: none;
+        justify-content: center;
+        grid-template: repeat(3,clamp(50px, 15vw, 150px)) / repeat(3, clamp(50px, 15vw, 150px));
+        $border-width: 3px;
+        $border-color: black;
+        div {
+            display: grid;
+            place-items: center;
+        }
+        div:nth-child(1) {
+            border: $border-width solid $border-color;
+        }
+        div:nth-child(2), 
+        div:nth-child(3) {
+            border: $border-width solid $border-color;
+            border-left: none;
+        }
+        div:nth-child(4),
+        div:nth-child(7){
+            border: $border-width solid $border-color;
+            border-top: none;
+        }
+        div:nth-child(5), 
+        div:nth-child(6),
+        div:nth-child(8),
+        div:nth-child(9) {
+            border: $border-width solid $border-color;
+            border-top: none;
+            border-left: none;
+        }
+    }
+    .turn {
+        position: absolute;
+        display: none;
+        font-family: 'Ubuntu', sans-serif;
+        background-color: #F06292;
+        width: clamp(150px, 45vw, 450px);
+        text-align: center;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        white-space: nowrap;
+        overflow: scroll;
+        top: 50vh;
+        font-size: clamp(0.9rem, 0.9rem + 2vw, 2rem);
+        left: 50vw;
+        transform: translate(-50%, -35vw);
+    }
+}
+
+.game-over-window {
+    min-height: 100vh;
+    min-width: 100vw;
+    display: grid;
+    display: none;
+    grid-template-rows: 20vh 20vh 20vh;
+    place-items: center;
+    @include background();
+    div:first-child {
+        font-size: clamp(2rem, 2rem + 3vw, 4rem);
+        font-family: 'Source Code Pro', monospace;
+        font-weight: 900;
+    }
+    .winner {
+        font-size: clamp(1rem, 1rem + 1vw, 2rem);
+        font-family: 'Ubuntu', sans-serif;
+        animation: appearance $animation-time ease-in-out forwards;
+    }
+    @include button();
+}
+
+@keyframes appearance {
+    0%{
+        transform: scale(1.1);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .player-vs-player-window {
+        .players-container {
+            gap: 20px;
+            input {
+                width: 40vw;
+            }
         }
     }
 }
