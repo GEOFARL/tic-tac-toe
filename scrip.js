@@ -104,12 +104,12 @@ let secureGame = (function() {
             mark = '<svg style="width: 80%; height: 80%" viewBox="0 0 24 24"><path fill="currentColor" d="M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/></svg>';
             markForTable = 'O';
         }
-        let move = function(e) {
-            let numberOfCell = e.target.getAttribute('data-key');
+        let move = function(cell) {
+            let numberOfCell = cell.getAttribute('data-key');
             let row = Math.ceil(numberOfCell / 3) - 1;
             let col = (numberOfCell - row * 3) - 1;
             playBoard.change(row, col, markForTable);
-            e.target.innerHTML = mark;
+            cell.innerHTML = mark;
         }
         function getName() {
             return name;
@@ -149,19 +149,21 @@ let secureGame = (function() {
             }
         }
         function addMark(e) {
-            let numberOfCell = e.target.getAttribute('data-key');
+            let allCells = [...document.querySelectorAll('.field-container div')]
+            let [cell] = e.path.filter(div => allCells.includes(div));
+            let numberOfCell = cell.getAttribute('data-key');
             let row = Math.ceil(numberOfCell / 3) - 1;
             let col = (numberOfCell - row * 3) - 1;
             if (moveCount % 2 === 1) {
                 if (playBoard.isPositionFree(row, col)) {
-                    players.player1.move(e);
+                    players.player1.move(cell);
                     moveCount++;
                     document.querySelector('.turn').innerText = `${players.player2.getName().capitalize()}'s turn`;
                 }
             }
             else {
                 if (playBoard.isPositionFree(row, col)) {
-                    players.player2.move(e);
+                    players.player2.move(cell);
                     moveCount++;
                     document.querySelector('.turn').innerText = `${players.player1.getName().capitalize()}'s turn`;
                 }
@@ -179,14 +181,24 @@ let secureGame = (function() {
                 playerVsPlayerWindow.style.display = 'none';
                 gameOverWindow.style.display = 'grid';
                 const newGameBtn = [...document.querySelectorAll('.new-game-container button')][1];
-                function changeDisplay () {
+                const swapPlacesBtn = [...document.querySelectorAll('.new-game-container button')][2];
+                function changeDisplay() {
                     gameOverWindow.style.display = 'none';
                     playerVsPlayerWindow.style.display = 'grid';
                     playBoard.cleanBoard();
                     document.querySelector('.turn').innerText = `${players.player1.getName().capitalize()}'s turn`;
                 }
+                function swapPlaces() {
+                    changeDisplay();
+                    let temp = players.player1;
+                    players.player1 = players.player2;
+                    players.player2 = temp;
+                    document.querySelector('.turn').innerText = `${players.player1.getName().capitalize()}'s turn`;
+                }
                 newGameBtn.addEventListener('click', changeDisplay);
                 newGameBtn.addEventListener('touch', changeDisplay);
+                swapPlacesBtn.addEventListener('click', swapPlaces);
+                swapPlacesBtn.addEventListener('touch', swapPlaces);
             }
         }
     })();

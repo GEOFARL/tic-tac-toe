@@ -244,10 +244,26 @@ body {
         border-radius: 10px;
         white-space: nowrap;
         overflow: scroll;
-        top: calc(32vh - 10vw);
+        top: calc(32vh - 14vw);
         font-size: clamp(0.9rem, 0.9rem + 2vw, 2rem);
-        left: 50vw;
-        transform: translate(-50%, -50%);
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        animation: turn-animation 1000ms forwards;
+    }
+
+    @keyframes turn-animation {
+        0% {
+            transform: scale(1.1);
+        }
+    
+        50% {
+            transform: scale(0.9);
+        }
+    
+        100% {
+            transform: scale(1);
+        }
     }
 }
 
@@ -268,6 +284,11 @@ body {
         font-size: clamp(1rem, 1rem + 1vw, 2rem);
         font-family: 'Ubuntu', sans-serif;
         animation: appearance $animation-time ease-in-out forwards;
+    }
+    .new-game-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
     @include button();
 }
