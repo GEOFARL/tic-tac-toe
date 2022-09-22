@@ -247,10 +247,10 @@ body {
   border-radius: 10px;
   white-space: nowrap;
   overflow: scroll;
-  top: 50vh;
+  top: calc(32vh - 10vw);
   font-size: clamp(0.9rem, 0.9rem + 2vw, 2rem);
   left: 50vw;
-  transform: translate(-50%, -35vw);
+  transform: translate(-50%, -50%);
 }
 
 .game-over-window {
