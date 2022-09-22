@@ -108,10 +108,8 @@ let secureGame = (function() {
             let numberOfCell = e.target.getAttribute('data-key');
             let row = Math.ceil(numberOfCell / 3) - 1;
             let col = (numberOfCell - row * 3) - 1;
-            if (playBoard.isPositionFree(row, col)) {
-                e.target.innerHTML = mark;
-            }
             playBoard.change(row, col, markForTable);
+            e.target.innerHTML = mark;
         }
         function getName() {
             return name;
@@ -151,15 +149,22 @@ let secureGame = (function() {
             }
         }
         function addMark(e) {
+            let numberOfCell = e.target.getAttribute('data-key');
+            let row = Math.ceil(numberOfCell / 3) - 1;
+            let col = (numberOfCell - row * 3) - 1;
             if (moveCount % 2 === 1) {
-                players.player1.move(e);
-                moveCount++;
-                document.querySelector('.turn').innerText = `${players.player2.getName().capitalize()}'s turn`;
+                if (playBoard.isPositionFree(row, col)) {
+                    players.player1.move(e);
+                    moveCount++;
+                    document.querySelector('.turn').innerText = `${players.player2.getName().capitalize()}'s turn`;
+                }
             }
             else {
-                players.player2.move(e);
-                moveCount++;
-                document.querySelector('.turn').innerText = `${players.player1.getName().capitalize()}'s turn`;
+                if (playBoard.isPositionFree(row, col)) {
+                    players.player2.move(e);
+                    moveCount++;
+                    document.querySelector('.turn').innerText = `${players.player1.getName().capitalize()}'s turn`;
+                }
             }
             if (playBoard.isGameOver() || moveCount === 10) {
                 if (moveCount === 10 && playBoard.getWinner() === 'tie') {
